@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post} from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CreateUserDTO } from './dto/create-user.dto';
 
 @Controller()
 export class UsersController {
@@ -9,6 +10,11 @@ export class UsersController {
   @Get('/users')  // Definimos la ruta para obtener los usuarios
     getUsers() {
     return this.usersService.getUsers();  // Llamamos al servicio de usuarios para obtener los usuarios y retornalo al cliente
+    }
+
+  @Post('/users')
+    createUser(@Body() user:CreateUserDTO) {
+      return this.usersService.createUser(user)
     }
   }
 
