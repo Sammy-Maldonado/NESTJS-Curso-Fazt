@@ -1,5 +1,7 @@
-import { Controller, Delete, Get, Put, Post, Patch } from '@nestjs/common';
+import { Controller, Delete, Get, Put, Post, Patch, Body, Query, Param} from '@nestjs/common';
 import { TasksService } from './tasks.service';
+import { CreateTaskDTO } from './dto/create-task.dto';
+import { UpdateTaskDTO } from './dto/update-task.dto';
 
 @Controller('/tasks')
 export class TaskController {
@@ -16,18 +18,25 @@ export class TaskController {
   // Los metodos HTTP son: GET, POST, PUT, DELETE y PATCH
 
   @Get()  // El metodo Get se usa para obtener un recurso
-  getAlltasks() {
+  getAlltasks(@Query() query: any) {
+    console.log(query)
     return this.tasksService.getTasks();  // Llamamos al servicio de tareas para obtener las tareas y retornalo al cliente
   }
 
+  @Get('/:id')  // con :id llamo automaticamente a cualquier id que me llegue en esa url
+  getTask(@Param('id') id: string) {
+    console.log(id);
+    return this.tasksService.getTask(parseInt(id));
+  }
+
   @Post() // El metodo Post se usa para crear un nuevo recurso
-  createTask() {
-    return this.tasksService.createTask();  // Llamamos al servicio de tareas para crear una nueva tarea y retornalo al cliente
+  createTask(@Body() task: CreateTaskDTO) {
+    return this.tasksService.createTask(task);  // Llamamos al servicio de tareas para crear una nueva tarea y retornalo al cliente
   }
 
   @Put()  // El metodo Put se usa para actualizar un recurso completo
-  updateTask() {
-    return this.tasksService.updateTask();  // Llamamos al servicio de tareas para actualizar una tarea y retornalo al cliente
+  updateTask(@Body() task: UpdateTaskDTO) {
+    return this.tasksService.updateTask(task);  // Llamamos al servicio de tareas para actualizar una tarea y retornalo al cliente
   }
 
   @Delete() // El metodo Delete se usa para eliminar un recurso
