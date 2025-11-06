@@ -2,8 +2,10 @@ import { Controller, Delete, Get, Put, Post, Patch, Body, Query, Param} from '@n
 import { TasksService } from './tasks.service';
 import { CreateTaskDTO } from './dto/create-task.dto';
 import { UpdateTaskDTO } from './dto/update-task.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('/tasks')
+@ApiTags('Tasks')
 export class TaskController {
   tasksService: TasksService;
   
@@ -18,6 +20,9 @@ export class TaskController {
   // Los metodos HTTP son: GET, POST, PUT, DELETE y PATCH
 
   @Get()  // El metodo Get se usa para obtener un recurso
+  @ApiOperation({ summary: 'Get all tasks' })
+  @ApiResponse({ status: 200, description: 'Return all tasks.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
   getAlltasks(@Query() query: any) {
     console.log(query)
     return this.tasksService.getTasks();  // Llamamos al servicio de tareas para obtener las tareas y retornalo al cliente
@@ -30,6 +35,7 @@ export class TaskController {
   }
 
   @Post() // El metodo Post se usa para crear un nuevo recurso
+  @ApiOperation({ summary: 'Create a task' })
   createTask(@Body() task: CreateTaskDTO) {
     return this.tasksService.createTask(task);  // Llamamos al servicio de tareas para crear una nueva tarea y retornalo al cliente
   }
